@@ -6,6 +6,7 @@ use App\Repository\CityRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: CityRepository::class)]
 #[UniqueEntity(fields: ['name'], message: 'Vec postoji tip sa ovim nazivom')]
