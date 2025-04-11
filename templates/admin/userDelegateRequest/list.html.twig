@@ -21,10 +21,6 @@
                         Ime
                     </th>
                     <th>
-                        <span class="ti ti-mail text-xl"></span>
-                        Email
-                    </th>
-                    <th>
                         <span class="ti ti-phone text-xl"></span>
                         Broj telefona
                     </th>
@@ -46,8 +42,14 @@
             <tbody>
             {% for userDelegateRequest in userDelegateRequests.items %}
                 <tr class="hover:bg-base-200">
-                    <td>{{ userDelegateRequest.user.fullName }}</td>
-                    <td>{{ userDelegateRequest.user.email }}</td>
+                    <td>
+                        <div>
+                            <a href="{{ path('admin_user_edit', {'id': userDelegateRequest.user.id}) }}" class="link link-hover">
+                                {{ userDelegateRequest.user.fullName }}
+                            </a>
+                        </div>
+                        <div class="text-sm text-gray-500">{{ userDelegateRequest.user.email }}</div>
+                    </td>
                     <td>{{ userDelegateRequest.phone }}</td>
                     <td>{{ userDelegateRequest.city.name }}</td>
                     <td>{{ userDelegateRequest.school.name }}</td>

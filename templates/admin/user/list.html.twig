@@ -20,10 +20,6 @@
                         Ime
                     </th>
                     <th>
-                        <span class="ti ti-mail text-xl"></span>
-                        Email
-                    </th>
-                    <th>
                         <span class="ti ti-military-rank text-xl"></span>
                         Privilegija
                     </th>
@@ -40,8 +36,14 @@
                 {% for user in users.items %}
                     <tr class="hover:bg-base-200">
                         <th>{{ user.id }}</th>
-                        <td>{{ user.fullName }}</td>
-                        <td>{{ user.email }}</td>
+                        <td>
+                            <div>
+                                <a href="{{ path('admin_user_edit', {'id': user.id}) }}" class="link link-hover">
+                                    {{ user.fullName }}
+                                </a>
+                            </div>
+                            <div class="text-sm text-gray-500">{{ user.email }}</div>
+                        </td>
                         <td>{{ user.getRoles|roleTranslate }}</td>
                         <td>
                             {{ user.createdAt|date('d.m.Y.') }}
