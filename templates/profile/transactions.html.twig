@@ -96,11 +96,11 @@
                                         {% endif %}
 
 
-                                        <a href="#" class="btn btn-primary btn-sm flex tooltip" data-tip="Oštampaj">
+                                        <a href="{{ path('profile_transaction_invoice_print', { 'id': transaction.id }) }}" target="_blank" class="btn btn-primary btn-sm flex tooltip" data-tip="Oštampaj">
                                             <span class="ti ti-printer text-xl"></span>
                                         </a>
 
-                                        <a href="#" class="btn btn-primary btn-sm flex tooltip" data-tip="NBS QR">
+                                        <a href="#" class="btn btn-primary btn-sm flex tooltip" data-tip="NBS QR" onclick="openQrModal('{{ transaction.id }}'); return false;">
                                             <span class="ti ti-qrcode text-xl"></span>
                                         </a>
                                     </div>
@@ -116,4 +116,33 @@
             {% endif %}
         </div>
     </div>
+
+    {# QR Modal (single instance, content loaded dynamically) #}
+    <dialog id="qr_modal" class="modal">
+        <div class="modal-box" id="qr_modal_box">
+            <form method="dialog">
+                <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+            </form>
+            <div id="qr_modal_content">
+                <!-- QR content will be loaded here -->
+            </div>
+        </div>
+    </dialog>
+
+    <script>
+        function openQrModal(transactionId) {
+            const modal = document.getElementById('qr_modal');
+            const contentDiv = document.getElementById('qr_modal_content');
+            contentDiv.innerHTML = '<div class="text-center my-4">Učitavanje...</div>';
+            fetch('/profil/qr-kod/' + transactionId)
+                .then(response => response.text())
+                .then(html => {
+                    contentDiv.innerHTML = html;
+                })
+                .catch(() => {
+                    contentDiv.innerHTML = '<div class="text-error">Greška pri učitavanju QR koda.</div>';
+                });
+            modal.showModal();
+        }
+    </script>
 {% endblock %}

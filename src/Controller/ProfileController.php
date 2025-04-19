@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Entity\Transaction;
-use App\Entity\User;
 use App\Form\ConfirmType;
 use App\Form\ProfileEditType;
 use App\Form\ProfileTransactionPaymentProofType;
@@ -19,8 +18,41 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted('ROLE_USER')]
 class ProfileController extends AbstractController
 {
-    public function __construct(private EntityManagerInterface $entityManager)
+    public function __construct(
+        private EntityManagerInterface $entityManager,
+        private \App\Service\InvoiceSlipService $invoiceSlipService,
+    ) {
+    }
+
+    #[Route('/stampaj-fakturu/{id}', name: 'transaction_invoice_print', requirements: ['id' => '\d+'])]
+    public function printInvoice(Transaction $transaction): Response
     {
+        /* @var User $user */
+        $user = $this->getUser();
+        if ($transaction->getUser() !== $user) {
+            throw $this->createAccessDeniedException();
+        }
+
+        // Prepare slip data and background info using the service
+        $data = $this->invoiceSlipService->prepareSlipData($transaction, $user);
+        $bgInfo = $this->invoiceSlipService->getSlipBackgroundInfo();
+
+        // Render Twig template
+        $html = $this->renderView('profile/invoice_slip.html.twig', array_merge($data, $bgInfo));
+
+        // Generate PDF with Dompdf using the service
+        $pdfContent = $this->invoiceSlipService->generatePdfFromHtml($html, $bgInfo['img_width'], $bgInfo['img_height']);
+
+        $filename = 'faktura_'.$transaction->getId().'.pdf';
+
+        return new Response(
+            $pdfContent,
+            200,
+            [
+                'Content-Type' => 'application/pdf',
+                'Content-Disposition' => 'inline; filename="'.$filename.'"',
+            ]
+        );
     }
 
     #[Route('/izmena-podataka', name: 'edit')]

@@ -11,6 +11,8 @@
         "doctrine/doctrine-bundle": "^2.14",
         "doctrine/doctrine-migrations-bundle": "^3.4",
         "doctrine/orm": "^3.3",
+        "dompdf/dompdf": "^3.1",
+        "endroid/qr-code": "^6.0",
         "giggsey/libphonenumber-for-php": "^9.0",
         "symfony/asset": "6.4.*",
         "symfony/console": "6.4.*",

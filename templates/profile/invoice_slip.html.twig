@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        @page { margin: 0; }
+        html, body {
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: "DejaVu Sans", Arial, sans-serif;
+            position: relative;
+        }
+        .bg-img {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 2480px;
+            height: 1181px;
+            z-index: 0;
+        }
+        .field {
+            position: absolute;
+            color: #000;
+            font-size: 48px;
+            white-space: nowrap;
+            z-index: 1;
+        }
+        #payer     { left: 141px;  top: 215px;  width: 980px;  height: 140px; }
+        #recipient { left: 141px;  top: 644px;  width: 980px;  height: 140px; }
+        #purpose   { left: 141px;  top: 432px;  width: 980px;  height: 140px; }
+        #payment_code { left: 1342px; top: 240px; width: 120px; text-align: center; }
+        #amount      { left: 1850px; top: 240px;  width: 490px;  text-align: right; }
+        #account   { left: 1342px; top: 377px;  width: 900px; }
+        #reference { left: 1552px; top: 512px;  width: 800px; }
+        #place     { left: 631px;  top: 904px;  width: 480px;  text-align: center; }
+        #date      { left: 1331px; top: 904px;  width: 330px;  text-align: center; }
+        #model     { left: 1342px; top: 511px;  width: 124px; }
+        #currency  { left: 1550px; top: 240px;  width: 94px; }
+    </style>
+</head>
+<body>
+    <img src="{{ bg_url }}" class="bg-img" alt="uplatnica template" />
+    <div id="payer" class="field">{{ payer }}</div>
+    <div id="recipient" class="field">{{ recipient }}</div>
+    <div id="purpose" class="field">{{ purpose }}</div>
+    <div id="payment_code" class="field">{{ payment_code }}</div>
+    <div id="amount" class="field">{{ amount }}</div>
+    <div id="account" class="field">{{ account|account_format }}</div>
+    <div id="reference" class="field">{{ reference }}</div>
+    <div id="place" class="field">{{ place }}</div>
+    <div id="date" class="field">{{ date }}</div>
+    <div id="model" class="field">{{ model }}</div>
+    <div id="currency" class="field">{{ currency }}</div>
+</body>
+</html>
