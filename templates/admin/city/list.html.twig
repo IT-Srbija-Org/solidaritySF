@@ -21,11 +21,23 @@
         <table class="table rounded-xl border border-base-200">
             <thead class="bg-gray-100">
                 <tr>
-                    <th>ID</th>
-                    <th>Naziv</th>
                     <th>
-                        <span class="ti ti-calendar-event text-xl"></span>
-                        Kreiran
+                        {{ include(
+                            'sort.html.twig',
+                            { 'path': 'admin_city_list', 'sort': 'id', 'title': 'ID' }
+                        ) }}
+                    </th>
+                    <th>
+                        {{ include(
+                            'sort.html.twig',
+                            { 'path': 'admin_city_list', 'sort': 'name', 'title': 'Naziv' }
+                        ) }}
+                    </th>
+                    <th>
+                        {{ include(
+                            'sort.html.twig',
+                            { 'path': 'admin_city_list', 'sort': 'createdAt', 'title': 'Kreiran', 'title_icon': 'ti-calendar-event' }
+                        ) }}
                     </th>
                     <th></th>
                 </tr>

@@ -14,18 +14,27 @@
         <table class="table rounded-xl border border-base-200">
             <thead class="bg-gray-100">
                 <tr>
-                    <th>ID</th>
                     <th>
-                        <span class="ti ti-user text-xl"></span>
-                        Ime
+                        {{ include(
+                            'sort.html.twig',
+                            { 'path': 'admin_delegate_list', 'sort': 'id', 'default_direction': 'desc', 'title': 'ID' }
+                        ) }}
+                    </th>
+                    <th>
+                        {{ include(
+                            'sort.html.twig',
+                            { 'path': 'admin_delegate_list', 'sort': 'fullName', 'title': 'Ime', 'title_icon': 'ti-user' }
+                        ) }}
                     </th>
                     <th>
                         <span class="ti ti-link text-xl"></span>
                         Povezanih škola
                     </th>
                     <th>
-                        <span class="ti ti-calendar-event text-xl"></span>
-                        Registrovan
+                        {{ include(
+                            'sort.html.twig',
+                            { 'path': 'admin_delegate_list', 'sort': 'createdAt', 'title': 'Registrovan', 'title_icon': 'ti-calendar-event' }
+                        ) }}
                     </th>
                     <th></th>
                 </tr>

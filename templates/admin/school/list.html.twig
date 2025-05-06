@@ -21,19 +21,35 @@
         <table class="table rounded-xl border border-base-200">
             <thead class="bg-gray-100">
                 <tr>
-                    <th>ID</th>
-                    <th>Naziv</th>
                     <th>
-                        <span class="ti ti-building-community text-xl"></span>
-                        Grad
+                        {{ include(
+                            'sort.html.twig',
+                            { 'path': 'admin_school_list', 'sort': 'id', 'title': 'ID' }
+                        ) }}
                     </th>
                     <th>
-                        <span class="ti ti-building-cog text-xl"></span>
-                        Tip škole
+                        {{ include(
+                            'sort.html.twig',
+                            { 'path': 'admin_school_list', 'sort': 'name', 'title': 'Naziv' }
+                        ) }}
                     </th>
                     <th>
-                        <span class="ti ti-calendar-event text-xl"></span>
-                        Kreirana
+                        {{ include(
+                            'sort.html.twig',
+                            { 'path': 'admin_school_list', 'sort': 'cityName', 'title': 'Grad', 'title_icon': 'ti-building-community' }
+                        ) }}
+                    </th>
+                    <th>
+                        {{ include(
+                            'sort.html.twig',
+                            { 'path': 'admin_school_list', 'sort': 'typeName', 'title': 'Tip škole',  'title_icon': 'ti-building-cog' }
+                        ) }}
+                    </th>
+                    <th>
+                        {{ include(
+                            'sort.html.twig',
+                            { 'path': 'admin_school_list', 'sort': 'createdAt', 'title': 'Kreirana', 'title_icon': 'ti-calendar-event' }
+                        ) }}
                     </th>
                     <th></th>
                 </tr>

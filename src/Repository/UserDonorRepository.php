@@ -113,8 +113,19 @@ class UserDonorRepository extends ServiceEntityRepository
         $this->mailer->send($message);
     }
 
-    public function search(array $criteria, int $page = 1, int $limit = 50): array
+    public function search(array $criteria, int $page = 1, int $limit = 50, string $sort = 'id', string $direction = 'DESC'): array
     {
+        $allowedSorts = ['id', 'fullName', 'isMonthly', 'amount', 'updatedAt'];
+        $allowedDirections = ['ASC', 'DESC'];
+
+        if (!in_array($sort, $allowedSorts, true)) {
+            $sort = 'id';
+        }
+
+        if (!in_array(strtoupper($direction), $allowedDirections, true)) {
+            $direction = 'DESC';
+        }
+
         $qb = $this->createQueryBuilder('ud');
         $qb->innerJoin('ud.user', 'u')
             ->andWhere('u.isActive = 1');
@@ -140,7 +151,19 @@ class UserDonorRepository extends ServiceEntityRepository
         }
 
         // Set the sorting
-        $qb->orderBy('ud.id', 'DESC');
+        switch ($sort) {
+            case 'fullName':
+                $qb->addSelect('CONCAT(u.firstName, \' \', u.lastName) AS HIDDEN fullName')
+                   ->orderBy('fullName', $direction);
+                break;
+            case 'isMonthly':
+            case 'amount':
+            case 'updatedAt':
+                $qb->orderBy('ud.'.$sort, $direction);
+                break;
+            default:
+                $qb->orderBy('u.'.$sort, $direction);
+        }
 
         // Apply pagination only if $limit is set and greater than 0
         if ($limit && $limit > 0) {
