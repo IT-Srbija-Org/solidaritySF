@@ -3,6 +3,7 @@
 namespace App\Form\Admin;
 
 use App\Entity\City;
+use App\Entity\DamagedEducator;
 use App\Entity\DamagedEducatorPeriod;
 use App\Entity\School;
 use App\Entity\Transaction;
@@ -68,6 +69,13 @@ class TransactionSearchType extends AbstractType
                 'choice_label' => function (City $city): string {
                     return $city->getName();
                 },
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('c')
+                        ->innerJoin(School::class, 's', 'WITH', 's.city = c')
+                        ->innerJoin(DamagedEducator::class, 'uds', 'WITH', 'uds.school = s')
+                        ->groupBy('c.id')
+                        ->orderBy('c.name', 'ASC');
+                },
             ])
             ->add('school', EntityType::class, [
                 'required' => false,
@@ -77,6 +85,13 @@ class TransactionSearchType extends AbstractType
                 'choice_value' => 'id',
                 'choice_label' => function (School $school): string {
                     return $school->getName().' ('.$school->getCity()->getName().')';
+                },
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('s')
+                        ->innerJoin(DamagedEducator::class, 'de', 'WITH', 'de.school = s')
+                        ->innerJoin(Transaction::class, 't', 'WITH', 't.damagedEducator = de')
+                        ->groupBy('s.id')
+                        ->orderBy('s.name', 'ASC');
                 },
             ])
             ->add('accountNumber', TextType::class, [
