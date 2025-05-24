@@ -26,12 +26,13 @@
                 <span class="ti ti-exclamation-circle text-2xl"></span>
                 <span>Korisnik nije potvrdio email adresu. Molimo potvrdite vašu email adresu.</span>
             </div>
-            <div class="mb-2 text-center">
-                <a href="{{ path('resend_verification', {'email': email}) }}" class="btn btn-secondary gap-2">
-                    <span class="ti ti-mail text-xl"></span>
-                    <span>Pošalji ponovo email za potvrdu</span>
-                </a>
-            </div>
+            <input type="hidden" name="emailresend" value="{{ email }}"/>           
+            <button type="submit" class="btn btn-secondary gap-2">Pošalji ponovo email za potvrdu</button>
+        {% endfor %}
+        
+        {% for email in app.flashes('unverified_user_no_alert') %}
+            <input type="hidden" name="emailresend" value="{{ email }}"/>           
+            <button type="submit" class="btn btn-secondary gap-2">Pošalji ponovo email za potvrdu</button>
         {% endfor %}
     </div>
 {% endif %}
