@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Core\Exception\AuthenticationCredentialsNotFoundException;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class RegistrationController extends AbstractController
 {
@@ -77,7 +78,7 @@ class RegistrationController extends AbstractController
     }
 
     #[Route('/email-verifikacija', name: 'verify_email')]
-    public function verifyUserEmail(Request $request, UserRepository $userRepository, UserDonorRepository $userDonorRepository, Security $security): Response
+    public function verifyUserEmail(Request $request, UserRepository $userRepository, UserDonorRepository $userDonorRepository, Security $security, TranslatorInterface $translator): Response
     {
         $userId = $request->get('id');
         if (!$userId) {
@@ -107,7 +108,7 @@ class RegistrationController extends AbstractController
                 return $this->redirectToRoute('delegate_request_success');
             }
         } catch (VerifyEmailExceptionInterface $exception) {
-            $this->addFlash('error', $exception->getReason());
+            $this->addFlash('error', $translator->trans($exception->getReason()));
 
             return $this->redirectToRoute('login');
         }
