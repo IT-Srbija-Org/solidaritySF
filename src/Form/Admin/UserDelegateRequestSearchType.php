@@ -5,6 +5,7 @@ namespace App\Form\Admin;
 use App\Entity\City;
 use App\Entity\School;
 use App\Entity\UserDelegateRequest;
+use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -44,6 +45,12 @@ class UserDelegateRequestSearchType extends AbstractType
                 'choice_label' => function (City $city): string {
                     return $city->getName();
                 },
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('c')
+                        ->innerJoin(UserDelegateRequest::class, 'udr', 'WITH', 'udr.city = c')
+                        ->groupBy('c.id')
+                        ->orderBy('c.name', 'ASC');
+                },
             ])
             ->add('school', EntityType::class, [
                 'required' => false,
@@ -54,6 +61,12 @@ class UserDelegateRequestSearchType extends AbstractType
                 'choice_label' => function (School $school): string {
                     return $school->getName().' ('.$school->getCity()->getName().')';
                 },
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('c')
+                        ->innerJoin(UserDelegateRequest::class, 'udr', 'WITH', 'udr.school = c')
+                        ->groupBy('c.id')
+                        ->orderBy('c.name', 'ASC');
+                }
             ])
             ->add('status', ChoiceType::class, [
                 'required' => false,
