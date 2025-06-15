@@ -7,6 +7,7 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Test\TypeTestCase;
+use App\Entity\UserDonor;
 
 class DonorSearchTypeTest extends TypeTestCase
 {
@@ -19,6 +20,7 @@ class DonorSearchTypeTest extends TypeTestCase
         $this->assertTrue($form->has('firstName'));
         $this->assertTrue($form->has('lastName'));
         $this->assertTrue($form->has('email'));
+        $this->assertTrue($form->has('comesFrom'));
         $this->assertTrue($form->has('submit'));
 
         // Get the form field types
@@ -26,6 +28,7 @@ class DonorSearchTypeTest extends TypeTestCase
         $this->assertInstanceOf(TextType::class, $form->get('firstName')->getConfig()->getType()->getInnerType());
         $this->assertInstanceOf(TextType::class, $form->get('lastName')->getConfig()->getType()->getInnerType());
         $this->assertInstanceOf(TextType::class, $form->get('email')->getConfig()->getType()->getInnerType());
+        $this->assertInstanceOf(ChoiceType::class, $form->get('comesFrom')->getConfig()->getType()->getInnerType());
         $this->assertInstanceOf(SubmitType::class, $form->get('submit')->getConfig()->getType()->getInnerType());
     }
 
@@ -35,6 +38,7 @@ class DonorSearchTypeTest extends TypeTestCase
             'isMonthly' => true,
             'firstName' => null,
             'lastName' => null,
+            'comesFrom' => null,
             'email' => null,
         ];
 
@@ -48,7 +52,28 @@ class DonorSearchTypeTest extends TypeTestCase
         // Check that the form data was mapped correctly
         $this->assertEquals($formData, $form->getData());
     }
-
+    
+    public function testSubmitValidData2(): void
+    {
+        $formData = [
+            'isMonthly' => null,
+            'firstName' => null,
+            'lastName' => null,
+            'comesFrom' => UserDonor::COMES_FROM_TV,
+            'email' => null,
+        ];
+        
+        $form = $this->factory->create(DonorSearchType::class);
+        
+        // Submit the form with test data
+        $form->submit($formData);
+        
+        $this->assertTrue($form->isSynchronized());
+        
+        // Check that the form data was mapped correctly
+        $this->assertEquals($formData, $form->getData());
+    }
+    
     public function testConfigureOptions(): void
     {
         $form = $this->factory->create(DonorSearchType::class);
